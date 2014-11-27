@@ -4,7 +4,7 @@ import java.util.Map;
 
 /**
  * A <code>ClassLoader</code> implementation that defines classes before loading
- * them for the first time using the provided class definitions map.
+ * them for the first time using a provided class definitions map.
  * 
  * @author Martin Tuskevicius
  */

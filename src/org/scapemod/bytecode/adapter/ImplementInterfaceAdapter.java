@@ -19,7 +19,7 @@ public class ImplementInterfaceAdapter extends ClassVisitor {
      * @param cv
      *            the delegate <code>ClassVisitor</code>.
      * @param interfaceName
-     *            the fully qualified name of the interface class.
+     *            the internal name of the interface class.
      */
     public ImplementInterfaceAdapter(ClassVisitor cv, String interfaceName) {
 	super(Opcodes.ASM4, cv);

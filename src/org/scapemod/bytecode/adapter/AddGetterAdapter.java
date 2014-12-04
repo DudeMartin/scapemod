@@ -35,7 +35,7 @@ public class AddGetterAdapter extends ClassVisitor {
      * @param getterDescriptor
      *            the descriptor of the getter method (that will be added).
      * @param ownerName
-     *            the name of the class owning the field.
+     *            the internal name of the class owning the field.
      * @param multiplier
      *            the value multiplier. A value of 1 is treated as if there is
      *            no multiplier.

@@ -21,7 +21,7 @@ public class ChangeSuperclassAdapter extends ClassVisitor {
      * @param cv
      *            the delegate <code>ClassVisitor</code>.
      * @param superclassName
-     *            the fully qualified name of the new superclass.
+     *            the internal name of the new superclass.
      */
     public ChangeSuperclassAdapter(ClassVisitor cv, String superclassName) {
 	super(Opcodes.ASM4, cv);

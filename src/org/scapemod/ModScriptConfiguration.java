@@ -35,8 +35,7 @@ public final class ModScriptConfiguration {
      * Returns the internal name of the custom <code>Canvas</code> class.
      * 
      * <p>
-     * The field containing this value is initialized to the internal name of
-     * {@link Canvas}.
+     * Unless otherwise set, this returns the internal name of {@link Canvas}.
      * 
      * @return the custom name.
      */

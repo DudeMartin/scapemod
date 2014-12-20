@@ -14,12 +14,45 @@ public final class ModScriptConfiguration {
     /**
      * The format string for the address of a mod script.
      */
-    public static String modScriptAddress = "";
+    private static volatile String modScriptAddress = "";
 
     /**
      * The internal name of the custom <code>Canvas</code> class.
      */
-    private static String customCanvasClassName = Type.getInternalName(Canvas.class);
+    private static volatile String customCanvasClassName = Type.getInternalName(Canvas.class);
+
+    /**
+     * Prevents external instantiation.
+     */
+    private ModScriptConfiguration() {
+
+    }
+
+    /**
+     * Sets the mod script address <em>format string</em>.
+     * 
+     * @param modScriptAddress
+     *            the format string.
+     * @throws IllegalArgumentException
+     *             if the string does not contain a <code>"%d"</code>.
+     */
+    public static void setModScriptAddress(String modScriptAddress) {
+	if (!modScriptAddress.contains("%d")) {
+	    throw new IllegalArgumentException("Not a proper format string.");
+	}
+	ModScriptConfiguration.modScriptAddress = modScriptAddress;
+    }
+
+    /**
+     * Returns the address of a mod script given a gamepack checksum.
+     * 
+     * @param gamepackChecksum
+     *            the gamepack checksum.
+     * @return the mod script address.
+     */
+    public static String getModScriptAddress(long gamepackChecksum) {
+	return String.format(modScriptAddress, gamepackChecksum);
+    }
 
     /**
      * Sets the internal name of the custom <code>Canvas</code> class.
@@ -41,23 +74,5 @@ public final class ModScriptConfiguration {
      */
     public static String getCustomCanvasClassName() {
 	return customCanvasClassName;
-    }
-
-    /**
-     * Returns the address of a mod script given a gamepack checksum.
-     * 
-     * @param gamepackChecksum
-     *            the gamepack checksum.
-     * @return the mod script address.
-     */
-    public static String getModScriptAddress(long gamepackChecksum) {
-	return String.format(modScriptAddress, gamepackChecksum);
-    }
-
-    /**
-     * Prevents external instantiation.
-     */
-    private ModScriptConfiguration() {
-
     }
 }

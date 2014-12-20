@@ -13,6 +13,7 @@ import org.scapemod.bytecode.asm.ClassReader;
 import org.scapemod.bytecode.asm.ClassVisitor;
 import org.scapemod.bytecode.asm.ClassWriter;
 import org.scapemod.util.BufferUtilities;
+import org.scapemod.util.ClassUtilities;
 
 /**
  * Represents a mod script.
@@ -65,7 +66,7 @@ public class ModScript {
 			    String getterDescriptor = BufferUtilities.getString(data);
 			    String ownerName = BufferUtilities.getString(data);
 			    int multiplier = data.getInt();
-			    boolean isStatic = (data.get() == 1);
+			    boolean isStatic = ClassUtilities.isStatic(fieldName, ownerName, readers);
 			    lastVisitor = new AddGetterAdapter(lastVisitor, fieldName, fieldDescriptor, getterName, getterDescriptor, ownerName, multiplier, isStatic);
 			}
 			lastVisitor = new ImplementInterfaceAdapter(lastVisitor, BufferUtilities.getString(data));

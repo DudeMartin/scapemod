@@ -172,14 +172,9 @@ public final class GameLoader {
      * 
      * @param gameStub
      *            the game stub.
-     * @throws IllegalStateException
-     *             if the game applet is active.
      */
     public static void startGame(GameStub gameStub) {
 	Applet applet = gameStub.applet;
-	if (applet.isActive()) {
-	    throw new IllegalStateException("The game applet is already active.");
-	}
 	GameAppletStub stub = gameStub.appletStub;
 	applet.setStub(stub);
 	applet.init();

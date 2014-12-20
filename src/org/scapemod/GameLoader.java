@@ -32,7 +32,7 @@ public final class GameLoader {
      * 
      * @author Martin Tuskevicius
      */
-    public class GameStub {
+    public final class GameStub {
 
 	/**
 	 * The instance of the <code>client</code> class.
@@ -75,7 +75,7 @@ public final class GameLoader {
     }
 
     private long checksum;
-    private Map<String, ClassReader> readerMap;
+    private Map<String, ClassReader> readers;
 
     /**
      * Prevents external instantiation.
@@ -94,10 +94,42 @@ public final class GameLoader {
      *             if an error occurs while loading.
      */
     private GameStub load(int world) throws Exception {
+	/*
+	 * Construct the game page address for the given world number.
+	 */
 	String pageAddress = String.format(GAME_PAGE_ADDRESS, world);
-	processGamepack(((JarURLConnection) new URL("jar:" + pageAddress + "gamepack.jar!/").openConnection()).getJarFile());
-	Object clientInstance = new DefinableClassLoader(new ModScript(ByteBuffer.wrap(WebUtilities.readContents(ModScriptConfiguration.getModScriptAddress(checksum)))).mod(readerMap)).loadClass("client").newInstance();
-	return new GameStub(clientInstance, (Client) clientInstance, (Applet) clientInstance, new GameAppletStub(new URL(pageAddress), WebUtilities.parseParameters(new String(WebUtilities.readContents(pageAddress)), "haveie6")));
+	
+	/*
+	 * Download the gamepack.
+	 */
+	JarFile gamepack = ((JarURLConnection) new URL("jar:" + pageAddress + "gamepack.jar!/").openConnection()).getJarFile();
+	
+	/*
+	 * Process the gamepack.
+	 */
+	processGamepack(gamepack);
+	
+	/*
+	 * Download the mod script corresponding to the gamepack's checksum.
+	 */
+	ModScript modScript = new ModScript(ByteBuffer.wrap(WebUtilities.readContents(ModScriptConfiguration.getModScriptAddress(checksum))));
+	
+	/*
+	 * Modify the classes in the gamepack.
+	 */
+	Map<String, byte[]> modifiedClasses = modScript.mod(readers);
+
+	/*
+	 * Create a class loader using the modified classes, then load and
+	 * instantiate the "client" class.
+	 */
+	Object clientInstance = new DefinableClassLoader(modifiedClasses).loadClass("client").newInstance();
+	
+	/*
+	 * Parse the game applet parameters.
+	 */
+	Map<String, String> parameters = WebUtilities.parseParameters(new String(WebUtilities.readContents(pageAddress)), "haveie6");
+	return new GameStub(clientInstance, (Client) clientInstance, (Applet) clientInstance, new GameAppletStub(new URL(pageAddress), parameters));
     }
 
     /**
@@ -109,14 +141,14 @@ public final class GameLoader {
      *             if an error occurs while processing.
      */
     private void processGamepack(JarFile gamepack) throws Exception {
-	readerMap = new HashMap<String, ClassReader>();
+	readers = new HashMap<String, ClassReader>();
 	Enumeration<JarEntry> entries = gamepack.entries();
 	while (entries.hasMoreElements()) {
 	    JarEntry entry = entries.nextElement();
 	    String name = entry.getName();
 	    if (name.endsWith(".class")) {
 		checksum += entry.getCrc();
-		readerMap.put(name.substring(0, name.indexOf('.')), new ClassReader(gamepack.getInputStream(entry)));
+		readers.put(name.substring(0, name.indexOf('.')), new ClassReader(gamepack.getInputStream(entry)));
 	    }
 	}
     }
@@ -140,6 +172,8 @@ public final class GameLoader {
      * 
      * @param gameStub
      *            the game stub.
+     * @throws IllegalStateException
+     *             if the game applet is active.
      */
     public static void startGame(GameStub gameStub) {
 	Applet applet = gameStub.applet;

@@ -1,6 +1,6 @@
 package org.scapemod.accessor;
 
-import java.awt.*;
+import java.awt.Canvas;
 
 public interface Client {
 

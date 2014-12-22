@@ -45,4 +45,8 @@ public interface Client {
     int getCameraZ();
 
     int getPlane();
+
+    int getCameraPitch();
+
+    int getCameraYaw();
 }

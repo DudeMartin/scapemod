@@ -72,8 +72,8 @@ public final class ClassUtilities {
      * @return <code>true</code> if the field has the <code>static</code> access
      *         modifier, <code>false</code> otherwise.
      */
-    public static boolean isStatic(String fieldName, String ownerName, Map<String, ClassReader> readers) {
-	boolean[] isStatic = new boolean[1];
+    public static boolean isStatic(final String fieldName, final String ownerName, Map<String, ClassReader> readers) {
+	final boolean[] isStatic = new boolean[1];
 	readers.get(ownerName).accept(new ClassVisitor(Opcodes.ASM4, null) {
 	    
 	    @Override

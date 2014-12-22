@@ -1,6 +1,10 @@
 package org.scapemod.accessor;
 
+import java.awt.*;
+
 public interface Client {
+
+    Canvas getCanvas();
 
     int getLoginState();
 
@@ -9,11 +13,11 @@ public interface Client {
     String getUsername();
 
     String getPassword();
-    
+
     int[] getCurrentStats();
-    
+
     int[] getBaseStats();
-    
+
     int[] getStatExperiences();
 
     InterfaceComponent[][] getInterfaceComponents();
@@ -23,6 +27,14 @@ public interface Client {
     Npc[] getNpcs();
 
     Player[] getPlayers();
-    
+
     CollisionMap[] getCollisionMaps();
+
+    int[] getInterfaceComponentWidths();
+
+    int[] getInterfaceComponentHeights();
+
+    int[] getInterfaceComponentXPositions();
+
+    int[] getInterfaceComponentYPositions();
 }

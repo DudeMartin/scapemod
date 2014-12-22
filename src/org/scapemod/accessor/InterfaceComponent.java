@@ -21,4 +21,8 @@ public interface InterfaceComponent extends Node {
     int getParentId();
 
     int getId();
+
+    int getBoundsIndex();
+
+    int getIndex();
 }

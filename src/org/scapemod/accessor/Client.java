@@ -37,4 +37,12 @@ public interface Client {
     int[] getInterfaceComponentXPositions();
 
     int[] getInterfaceComponentYPositions();
+
+    int getCameraX();
+
+    int getCameraY();
+
+    int getCameraZ();
+
+    int getPlane();
 }

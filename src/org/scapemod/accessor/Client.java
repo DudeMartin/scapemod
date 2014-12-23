@@ -63,4 +63,10 @@ public interface Client {
     int[][][] getTileHeights();
 
     byte[][][] getTileBytes();
+
+    int getMapScale();
+
+    int getMapAngle();
+
+    int getMapOffset();
 }

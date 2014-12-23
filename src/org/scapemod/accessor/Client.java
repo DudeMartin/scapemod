@@ -59,4 +59,8 @@ public interface Client {
     int getEnergy();
 
     int getWeight();
+
+    int[][][] getTileHeights();
+
+    byte[][][] getTileBytes();
 }

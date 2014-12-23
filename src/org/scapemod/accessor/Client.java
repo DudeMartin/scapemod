@@ -49,4 +49,14 @@ public interface Client {
     int getCameraPitch();
 
     int getCameraYaw();
+
+    Player getLocalPlayer();
+
+    int getBaseX();
+
+    int getBaseY();
+
+    int getEnergy();
+
+    int getWeight();
 }

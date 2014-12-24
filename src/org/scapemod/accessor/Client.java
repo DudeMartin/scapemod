@@ -69,4 +69,6 @@ public interface Client {
     int getMapAngle();
 
     int getMapOffset();
+
+    Region getRegion();
 }

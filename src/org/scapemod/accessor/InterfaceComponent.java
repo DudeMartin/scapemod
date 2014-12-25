@@ -25,4 +25,8 @@ public interface InterfaceComponent extends Node {
     int getBoundsIndex();
 
     int getIndex();
+
+    int getTextureId();
+
+    String getText();
 }

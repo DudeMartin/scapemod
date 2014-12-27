@@ -79,4 +79,12 @@ public interface Client {
     int getMenuSize();
 
     boolean getMenuOpen();
+
+    int getMenuX();
+
+    int getMenuY();
+
+    int getMenuWidth();
+
+    int getMenuHeight();
 }

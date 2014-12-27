@@ -87,4 +87,8 @@ public interface Client {
     int getMenuWidth();
 
     int getMenuHeight();
+
+    int getDestinationX();
+
+    int getDestinationY();
 }

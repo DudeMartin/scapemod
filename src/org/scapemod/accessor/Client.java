@@ -75,4 +75,6 @@ public interface Client {
     String[] getMenuActions();
 
     String[] getMenuOptions();
+
+    int getMenuSize();
 }

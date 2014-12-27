@@ -77,4 +77,6 @@ public interface Client {
     String[] getMenuOptions();
 
     int getMenuSize();
+
+    boolean getMenuOpen();
 }

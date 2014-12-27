@@ -71,4 +71,8 @@ public interface Client {
     int getMapOffset();
 
     Region getRegion();
+
+    String[] getMenuActions();
+
+    String[] getMenuOptions();
 }

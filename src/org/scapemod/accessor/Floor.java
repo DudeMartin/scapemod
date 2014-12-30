@@ -1,8 +1,5 @@
 package org.scapemod.accessor;
 
-/**
- * Created by luckruns0ut on 24/12/2014.
- */
 public interface Floor {
 
     RenderableNode getRenderableNode();

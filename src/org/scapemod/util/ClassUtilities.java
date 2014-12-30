@@ -39,7 +39,7 @@ public final class ClassUtilities {
 	ArrayList<Method> filtered = new ArrayList<Method>(declared.length);
 	methodLoop: for (Method m : declared) {
 	    for (String prefix : prefixes) {
-		if (m.getName().startsWith(prefix)) {
+		if (m.getName().startsWith(prefix) && !m.getName().equals(prefix)) {
 		    continue methodLoop;
 		}
 	    }

@@ -11,4 +11,6 @@ public interface InteractableObject {
     int getX();
 
     int getY();
+    
+    RenderableNode getRenderableNode();
 }

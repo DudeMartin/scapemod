@@ -4,9 +4,9 @@ public interface Tile {
 
     InteractableObject[] getObjects();
 
-    Boundary getBoundary();
+    BoundaryObject getBoundary();
 
-    Wall getWall();
+    WallDecoration getWall();
 
-    Floor getFloor();
+    FloorObject getFloor();
 }

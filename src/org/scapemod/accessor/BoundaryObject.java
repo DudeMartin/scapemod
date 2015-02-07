@@ -1,6 +1,6 @@
 package org.scapemod.accessor;
 
-public interface Floor {
+public interface BoundaryObject {
 
     RenderableNode getRenderableNode();
 

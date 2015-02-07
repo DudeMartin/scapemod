@@ -16,7 +16,7 @@ public interface InterfaceComponent extends Node {
 
     InterfaceComponent[] getComponents();
 
-    boolean getHidden();
+    boolean isHidden();
 
     int getParentId();
 

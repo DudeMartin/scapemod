@@ -78,7 +78,7 @@ public interface Client {
 
     int getMenuSize();
 
-    boolean getMenuOpen();
+    boolean isMenuOpen();
 
     int getMenuX();
 

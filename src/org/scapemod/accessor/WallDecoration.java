@@ -1,6 +1,6 @@
 package org.scapemod.accessor;
 
-public interface Wall {
+public interface WallDecoration {
 
     RenderableNode getRenderableNode();
 

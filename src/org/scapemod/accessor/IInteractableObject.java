@@ -1,6 +1,6 @@
 package org.scapemod.accessor;
 
-public interface InteractableObject {
+public interface IInteractableObject {
 
     int getHeight();
 
@@ -12,5 +12,7 @@ public interface InteractableObject {
 
     int getY();
     
-    RenderableNode getRenderableNode();
+    int getPlane();
+    
+    IRenderableNode getRenderableNode();
 }

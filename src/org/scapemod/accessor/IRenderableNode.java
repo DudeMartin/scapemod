@@ -1,6 +1,6 @@
 package org.scapemod.accessor;
 
-public interface RenderableNode extends CacheableNode {
+public interface IRenderableNode extends ICacheableNode {
 
     int getHeight();
 }

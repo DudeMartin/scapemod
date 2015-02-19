@@ -2,7 +2,7 @@ package org.scapemod.accessor;
 
 import java.awt.Canvas;
 
-public interface Client {
+public interface IClient {
 
     Canvas getCanvas();
 
@@ -20,15 +20,15 @@ public interface Client {
 
     int[] getStatExperiences();
 
-    InterfaceComponent[][] getInterfaceComponents();
+    IInterfaceComponent[][] getInterfaceComponents();
 
-    HashTable getInterfaceComponentNodes();
+    IHashTable getInterfaceComponentNodes();
 
-    Npc[] getNpcs();
+    INpc[] getNpcs();
 
-    Player[] getPlayers();
+    IPlayer[] getPlayers();
 
-    CollisionMap[] getCollisionMaps();
+    ICollisionMap[] getCollisionMaps();
 
     int[] getInterfaceComponentWidths();
 
@@ -50,7 +50,7 @@ public interface Client {
 
     int getCameraYaw();
 
-    Player getLocalPlayer();
+    IPlayer getLocalPlayer();
 
     int getBaseX();
 
@@ -70,7 +70,7 @@ public interface Client {
 
     int getMapOffset();
 
-    Region getRegion();
+    IRegion getRegion();
 
     String[] getMenuActions();
 

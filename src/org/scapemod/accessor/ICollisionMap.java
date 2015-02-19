@@ -1,6 +1,6 @@
 package org.scapemod.accessor;
 
-public interface CollisionMap {
+public interface ICollisionMap {
 
     int[][] getFlags();
 }

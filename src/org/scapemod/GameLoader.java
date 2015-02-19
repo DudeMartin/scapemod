@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.scapemod.accessor.Client;
+import org.scapemod.accessor.IClient;
 import org.scapemod.bytecode.asm.ClassReader;
 import org.scapemod.util.WebUtilities;
 
@@ -42,7 +42,7 @@ public final class GameLoader {
 	/**
 	 * The accessor for the <code>client</code> class instance.
 	 */
-	public final Client client;
+	public final IClient client;
 
 	/**
 	 * The game applet.
@@ -66,7 +66,7 @@ public final class GameLoader {
 	 * @param appletStub
 	 *            the game applet stub.
 	 */
-	private GameStub(Object clientInstance, Client client, Applet applet, GameAppletStub appletStub) {
+	private GameStub(Object clientInstance, IClient client, Applet applet, GameAppletStub appletStub) {
 	    this.clientInstance = clientInstance;
 	    this.client = client;
 	    this.applet = applet;
@@ -129,7 +129,7 @@ public final class GameLoader {
 	 * Parse the game applet parameters.
 	 */
 	Map<String, String> parameters = WebUtilities.parseParameters(new String(WebUtilities.readContents(pageAddress)), "haveie6");
-	return new GameStub(clientInstance, (Client) clientInstance, (Applet) clientInstance, new GameAppletStub(new URL(pageAddress), parameters));
+	return new GameStub(clientInstance, (IClient) clientInstance, (Applet) clientInstance, new GameAppletStub(new URL(pageAddress), parameters));
     }
 
     /**

@@ -1,8 +1,8 @@
 package org.scapemod.accessor;
 
-public interface FloorObject {
+public interface IFloorObject {
 
-    RenderableNode getRenderableNode();
+    IRenderableNode getRenderableNode();
 
     int getHash();
 

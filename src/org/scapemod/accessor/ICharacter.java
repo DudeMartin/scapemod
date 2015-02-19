@@ -1,6 +1,6 @@
 package org.scapemod.accessor;
 
-public interface Character extends RenderableNode {
+public interface ICharacter extends IRenderableNode {
 
     String getOverheadText();
 

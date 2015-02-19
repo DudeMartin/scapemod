@@ -1,6 +1,6 @@
 package org.scapemod.accessor;
 
-public interface InterfaceComponent extends Node {
+public interface IInterfaceComponent extends INode {
 
     int getX();
 
@@ -14,7 +14,7 @@ public interface InterfaceComponent extends Node {
 
     int getScrollY();
 
-    InterfaceComponent[] getComponents();
+    IInterfaceComponent[] getComponents();
 
     boolean isHidden();
 

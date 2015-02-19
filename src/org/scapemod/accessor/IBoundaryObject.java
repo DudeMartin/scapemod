@@ -1,8 +1,8 @@
 package org.scapemod.accessor;
 
-public interface WallDecoration {
+public interface IBoundaryObject {
 
-    RenderableNode getRenderableNode();
+    IRenderableNode getRenderableNode();
 
     int getHash();
 

@@ -1,6 +1,6 @@
 package org.scapemod.accessor;
 
-public interface Model extends RenderableNode {
+public interface IModel extends IRenderableNode {
     
     int[] getXVertices();
 

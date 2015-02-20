@@ -31,4 +31,27 @@ public final class BufferUtilities {
 	}
 	return builder.toString();
     }
+
+    /**
+     * Reads a <code>byte</code> from the buffer and returns its unsigned value.
+     * 
+     * @param buf
+     *            the buffer to read from.
+     * @return the unsigned value.
+     */
+    public static int getUnsignedByte(ByteBuffer buf) {
+	return buf.get() & 0xFF;
+    }
+
+    /**
+     * Reads a <code>short</code> from the buffer and returns its unsigned
+     * value.
+     * 
+     * @param buf
+     *            the buffer to read from.
+     * @return the unsigned value.
+     */
+    public static int getUnsignedShort(ByteBuffer buf) {
+	return buf.getShort() & 0xFFFF;
+    }
 }

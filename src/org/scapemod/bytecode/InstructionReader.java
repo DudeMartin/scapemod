@@ -6,7 +6,6 @@ import static org.scapemod.util.BufferUtilities.getUnsignedShort;
 
 import java.nio.ByteBuffer;
 
-import org.scapemod.bytecode.asm.Label;
 import org.scapemod.bytecode.asm.MethodVisitor;
 
 /**
@@ -14,19 +13,17 @@ import org.scapemod.bytecode.asm.MethodVisitor;
  * 
  * @author Martin Tuskevicius
  */
-public class InstructionReader {
+public final class InstructionReader {
 
-    private static final int LABEL = 0;
-    private static final int INSTRUCTION = 1;
-    private static final int FIELD_INSTRUCTION = 2;
-    private static final int METHOD_INSTRUCTION = 3;
-    private static final int TYPE_INSTRUCTION = 4;
-    private static final int JUMP_INSTRUCTION = 5;
-    private static final int INT_INSTRUCTION = 6;
-    private static final int INT_INCREMENT_INSTRUCTION = 7;
-    private static final int VARIABLE_INSTRUCTION = 8;
-    private static final int LDC_INSTRUCTION = 9;
-    private static final int MULTI_A_NEW_ARRAY_INSTRUCTION = 10;
+    private static final int INSTRUCTION = 0;
+    private static final int FIELD_INSTRUCTION = 1;
+    private static final int METHOD_INSTRUCTION = 2;
+    private static final int TYPE_INSTRUCTION = 3;
+    private static final int INT_INSTRUCTION = 4;
+    private static final int INT_INCREMENT_INSTRUCTION = 5;
+    private static final int VARIABLE_INSTRUCTION = 6;
+    private static final int LDC_INSTRUCTION = 7;
+    private static final int MULTI_A_NEW_ARRAY_INSTRUCTION = 8;
 
     private static final int LDC_INT = 0;
     private static final int LDC_LONG = 1;
@@ -35,7 +32,8 @@ public class InstructionReader {
     private static final int LDC_STRING = 4;
 
     private final ByteBuffer data;
-
+    private final int instructionCount;
+    
     /**
      * Creates a new instruction reader.
      * 
@@ -44,6 +42,17 @@ public class InstructionReader {
      */
     public InstructionReader(ByteBuffer data) {
 	this.data = data;
+	this.instructionCount = getUnsignedShort(data);
+	data.mark();
+    }
+
+    /**
+     * Returns the number of instructions that will be inserted.
+     * 
+     * @return the instruction count.
+     */
+    public int getInstructionCount() {
+	return instructionCount;
     }
 
     /**
@@ -53,17 +62,10 @@ public class InstructionReader {
      *            the method visitor.
      */
     public void insertInstructions(MethodVisitor mv) {
-	int instructionCount = getUnsignedShort(data);
-	Label[] labels = new Label[getUnsignedByte(data)];
-	for (int i = 0; i < labels.length; i++) {
-	    labels[i] = new Label();
-	}
+	data.reset();
+	int instructionCount = this.instructionCount;
 	while (instructionCount-- > 0) {
 	    switch (data.get()) {
-	    case LABEL: {
-		mv.visitLabel(labels[getUnsignedByte(data)]);
-		break;
-	    }
 	    case INSTRUCTION: {
 		int opcode = getUnsignedByte(data);
 		mv.visitInsn(opcode);
@@ -89,12 +91,6 @@ public class InstructionReader {
 		int opcode = getUnsignedByte(data);
 		String type = getString(data);
 		mv.visitTypeInsn(opcode, type);
-		break;
-	    }
-	    case JUMP_INSTRUCTION: {
-		int opcode = getUnsignedByte(data);
-		Label label = labels[getUnsignedByte(data)];
-		mv.visitJumpInsn(opcode, label);
 		break;
 	    }
 	    case INT_INSTRUCTION: {

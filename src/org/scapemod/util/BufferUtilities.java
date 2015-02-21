@@ -17,6 +17,22 @@ public final class BufferUtilities {
     }
 
     /**
+     * Reads the specified number of bytes from the provided byte buffer and
+     * returns a new <code>ByteBuffer</code> containing the read bytes.
+     * 
+     * @param buf
+     *            the buffer to read the bytes from.
+     * @param number
+     *            the number of bytes to read.
+     * @return a new buffer containing the bytes.
+     */
+    public static ByteBuffer getBytes(ByteBuffer buf, int number) {
+	byte[] bytes = new byte[number];
+	buf.get(bytes);
+	return ByteBuffer.wrap(bytes);
+    }
+
+    /**
      * Reads a null-terminated (<code>'\0'</code>) string from the provided byte
      * buffer.
      * 

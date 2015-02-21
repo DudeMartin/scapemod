@@ -1,6 +1,9 @@
 package org.scapemod;
 
 import java.awt.Canvas;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.scapemod.bytecode.asm.Type;
 
@@ -17,10 +20,10 @@ public final class ModScriptConfiguration {
     private static volatile String modScriptAddress = "";
 
     /**
-     * The internal name of the custom <code>Canvas</code> class.
+     * Contains mappings of internal superclass names to refactored class names.
      */
-    private static volatile String customCanvasClassName = Type.getInternalName(Canvas.class);
-
+    private static Map<String, String> superclassMap = Collections.synchronizedMap(new HashMap<String, String>());
+    
     /**
      * Prevents external instantiation.
      */
@@ -55,24 +58,36 @@ public final class ModScriptConfiguration {
     }
 
     /**
+     * Associates a superclass with a refactored class name.
+     * 
+     * @param refactoredName
+     *            the refactored class name.
+     * @param superclass
+     *            the superclass.
+     */
+    public static void setSuperclass(String refactoredName, Class<?> superclass) {
+	superclassMap.put(refactoredName, Type.getInternalName(superclass));
+    }
+
+    /**
      * Sets the internal name of the custom <code>Canvas</code> class.
      * 
      * @param customCanvasClass
      *            the class representation.
      */
     public static void setCustomCanvasClassName(Class<? extends Canvas> customCanvasClass) {
-	customCanvasClassName = Type.getInternalName(customCanvasClass);
+	setSuperclass("Canvas", customCanvasClass);
     }
 
     /**
-     * Returns the internal name of the custom <code>Canvas</code> class.
+     * Returns the internal name of the superclass associated with the provided
+     * refactored class name.
      * 
-     * <p>
-     * Unless otherwise set, this returns the internal name of {@link Canvas}.
-     * 
-     * @return the custom name.
+     * @param refactoredName
+     *            the refactored class name.
+     * @return the internal superclass name.
      */
-    public static String getCustomCanvasClassName() {
-	return customCanvasClassName;
+    public static String getSuperclass(String refactoredName) {
+	return superclassMap.get(refactoredName);
     }
 }

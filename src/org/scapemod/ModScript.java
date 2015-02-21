@@ -4,11 +4,14 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
+import org.scapemod.bytecode.InstructionReader;
 import org.scapemod.bytecode.adapter.AddGetterAdapter;
+import org.scapemod.bytecode.adapter.AddMethodAdapter;
 import org.scapemod.bytecode.adapter.ChangeSuperclassAdapter;
 import org.scapemod.bytecode.adapter.ImplementInterfaceAdapter;
-import org.scapemod.bytecode.adapter.MaskInjectedMethodsAdapter;
+import org.scapemod.bytecode.adapter.InsertInstructionsAdapter;
 import org.scapemod.bytecode.asm.ClassReader;
 import org.scapemod.bytecode.asm.ClassVisitor;
 import org.scapemod.bytecode.asm.ClassWriter;
@@ -21,6 +24,12 @@ import org.scapemod.util.ClassUtilities;
  * @author Martin Tuskevicius
  */
 public class ModScript {
+
+    private static final int ADD_GETTER = 0;
+    private static final int ADD_METHOD = 1;
+    private static final int INSERT_INSTRUCTIONS = 2;
+    private static final int IMPLEMENT_INTERFACE = 3;
+    private static final int CHANGE_SUPERCLASS = 4;
 
     protected final ByteBuffer data;
 
@@ -46,20 +55,20 @@ public class ModScript {
 	data.rewind();
 	Map<String, byte[]> modifiedClassData = new HashMap<String, byte[]>();
 	short remainingClassCount = data.getShort();
-	boolean canvasModified = false;
 	while (modifiedClassData.size() < readers.size()) {
 	    for (Entry<String, ClassReader> readerEntry : readers.entrySet()) {
 		if (modifiedClassData.containsKey(readerEntry.getKey())) {
 		    continue;
 		}
 		String className = readerEntry.getKey();
-		ClassWriter classWriter = new ClassWriter(0);
-		ClassVisitor lastVisitor = new MaskInjectedMethodsAdapter(classWriter);
+		ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+		ClassVisitor lastVisitor = classWriter;
 		if (remainingClassCount-- > 0) {
 		    className = BufferUtilities.getString(data);
-		    if (canvasModified) {
-			byte getterCount = data.get();
-			for (int i = 0; i < getterCount; i++) {
+		    byte modificationCount = data.get();
+		    while (modificationCount-- > 0) {
+			switch (data.get()) {
+			case ADD_GETTER:
 			    String fieldName = BufferUtilities.getString(data);
 			    String fieldDescriptor = BufferUtilities.getString(data);
 			    String getterName = BufferUtilities.getString(data);
@@ -68,11 +77,29 @@ public class ModScript {
 			    int multiplier = data.getInt();
 			    boolean isStatic = ClassUtilities.isStatic(fieldName, ownerName, readers);
 			    lastVisitor = new AddGetterAdapter(lastVisitor, fieldName, fieldDescriptor, getterName, getterDescriptor, ownerName, multiplier, isStatic);
+			    break;
+			case ADD_METHOD: {
+			    int methodAccess = data.getInt();
+			    String methodName = BufferUtilities.getString(data);
+			    String methodDescriptor = BufferUtilities.getString(data);
+			    InstructionReader instructions = new InstructionReader(BufferUtilities.getBytes(data, data.getInt()));
+			    lastVisitor = new AddMethodAdapter(lastVisitor, methodAccess, methodName, methodDescriptor, instructions);
+			    break;
 			}
-			lastVisitor = new ImplementInterfaceAdapter(lastVisitor, BufferUtilities.getString(data));
-		    } else {
-			lastVisitor = new ChangeSuperclassAdapter(lastVisitor, ModScriptConfiguration.getCustomCanvasClassName());
-			canvasModified = true;
+			case INSERT_INSTRUCTIONS: {
+			    String methodName = BufferUtilities.getString(data);
+			    String methodDescriptor = BufferUtilities.getString(data);
+			    Map<Integer, InstructionReader> instructionsMap = createInstructionMap();
+			    lastVisitor = new InsertInstructionsAdapter(lastVisitor, methodName, methodDescriptor, instructionsMap);
+			    break;
+			}
+			case IMPLEMENT_INTERFACE:
+			    lastVisitor = new ImplementInterfaceAdapter(lastVisitor, BufferUtilities.getString(data));
+			    break;
+			case CHANGE_SUPERCLASS:
+			    lastVisitor = new ChangeSuperclassAdapter(lastVisitor, ModScriptConfiguration.getSuperclass(BufferUtilities.getString(data)));
+			    break;
+			}
 		    }
 		}
 		ClassReader classReader = (readerEntry.getKey() == className) ? readerEntry.getValue() : readers.get(className);
@@ -81,5 +108,28 @@ public class ModScript {
 	    }
 	}
 	return modifiedClassData;
+    }
+    
+    /**
+     * Reads instruction positions and instruction data and constructs a sorted
+     * and offsetted instruction map.
+     * 
+     * @return the instruction map.
+     */
+    private Map<Integer, InstructionReader> createInstructionMap() {
+	Map<Integer, InstructionReader> sortedInstructionMap = new TreeMap<Integer, InstructionReader>();
+	for (int count = data.get(); count > 0; count--) {
+	    int position = BufferUtilities.getUnsignedShort(data);
+	    InstructionReader instructions = new InstructionReader(BufferUtilities.getBytes(data, data.getInt()));
+	    sortedInstructionMap.put(position, instructions);
+	}
+	Map<Integer, InstructionReader> offsettedMap = new HashMap<Integer, InstructionReader>();
+	int offset = 0;
+	for (Entry<Integer, InstructionReader> entry : sortedInstructionMap.entrySet()) {
+	    InstructionReader instructions = entry.getValue();
+	    offsettedMap.put(entry.getKey() + offset, instructions);
+	    offset += instructions.getInstructionCount();
+	}
+	return offsettedMap;
     }
 }

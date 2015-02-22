@@ -48,12 +48,13 @@ public class AddMethodAdapter extends ClassVisitor {
 
     @Override
     public void visitEnd() {
-	MethodVisitor mv = cv.visitMethod(access, name, descriptor, null, null);
+	MethodVisitor methodVisitor = cv.visitMethod(access, name, descriptor, null, null);
 	if (!Modifier.isAbstract(access)) {
-	    mv.visitCode();
-	    instructions.insertInstructions(mv);
+	    methodVisitor.visitCode();
+	    instructions.insertInstructions(methodVisitor);
 	}
-	mv.visitEnd();
+	methodVisitor.visitMaxs(0, 0);
+	methodVisitor.visitEnd();
 	cv.visitEnd();
     }
 }

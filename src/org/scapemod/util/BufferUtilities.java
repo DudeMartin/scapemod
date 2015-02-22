@@ -5,6 +5,9 @@ import java.nio.ByteBuffer;
 /**
  * A collection of buffer-related utility methods.
  * 
+ * <p>
+ * The methods in this class do not check for buffer underflow.
+ * 
  * @author Martin Tuskevicius
  */
 public final class BufferUtilities {

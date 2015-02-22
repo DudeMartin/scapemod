@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import org.scapemod.bytecode.InstructionReader;
+import org.scapemod.bytecode.adapter.AddCallerAdapter;
 import org.scapemod.bytecode.adapter.AddGetterAdapter;
 import org.scapemod.bytecode.adapter.AddMethodAdapter;
 import org.scapemod.bytecode.adapter.ChangeSuperclassAdapter;
@@ -23,15 +24,16 @@ import org.scapemod.util.ClassUtilities;
  * 
  * @author Martin Tuskevicius
  */
-public class ModScript {
+public final class ModScript {
 
-    private static final int ADD_GETTER = 0;
-    private static final int ADD_METHOD = 1;
-    private static final int INSERT_INSTRUCTIONS = 2;
-    private static final int IMPLEMENT_INTERFACE = 3;
-    private static final int CHANGE_SUPERCLASS = 4;
+    public static final int ADD_GETTER = 0;
+    public static final int ADD_CALLER = 1;
+    public static final int ADD_METHOD = 2;
+    public static final int INSERT_INSTRUCTIONS = 3;
+    public static final int IMPLEMENT_INTERFACE = 4;
+    public static final int CHANGE_SUPERCLASS = 5;
 
-    protected final ByteBuffer data;
+    private final ByteBuffer data;
 
     /**
      * Creates a new mod script.
@@ -68,7 +70,7 @@ public class ModScript {
 		    byte modificationCount = data.get();
 		    while (modificationCount-- > 0) {
 			switch (data.get()) {
-			case ADD_GETTER:
+			case ADD_GETTER: {
 			    String fieldName = BufferUtilities.getString(data);
 			    String fieldDescriptor = BufferUtilities.getString(data);
 			    String getterName = BufferUtilities.getString(data);
@@ -78,6 +80,17 @@ public class ModScript {
 			    boolean isStatic = ClassUtilities.isStatic(fieldName, ownerName, readers);
 			    lastVisitor = new AddGetterAdapter(lastVisitor, fieldName, fieldDescriptor, getterName, getterDescriptor, ownerName, multiplier, isStatic);
 			    break;
+			}
+			case ADD_CALLER: {
+			    String callerMethodName = BufferUtilities.getString(data);
+			    String methodName = BufferUtilities.getString(data);
+			    String methodDescriptor = BufferUtilities.getString(data);
+			    String ownerName = BufferUtilities.getString(data);
+			    int dummyArgument = data.getInt();
+			    boolean isStatic = ClassUtilities.isStatic(methodName, methodDescriptor, ownerName, readers);
+			    lastVisitor = new AddCallerAdapter(lastVisitor, callerMethodName, methodName, methodDescriptor, ownerName, dummyArgument, isStatic);
+			    break;
+			}
 			case ADD_METHOD: {
 			    int methodAccess = data.getInt();
 			    String methodName = BufferUtilities.getString(data);
@@ -93,12 +106,14 @@ public class ModScript {
 			    lastVisitor = new InsertInstructionsAdapter(lastVisitor, methodName, methodDescriptor, instructionsMap);
 			    break;
 			}
-			case IMPLEMENT_INTERFACE:
+			case IMPLEMENT_INTERFACE: {
 			    lastVisitor = new ImplementInterfaceAdapter(lastVisitor, BufferUtilities.getString(data));
 			    break;
-			case CHANGE_SUPERCLASS:
+			}
+			case CHANGE_SUPERCLASS: {
 			    lastVisitor = new ChangeSuperclassAdapter(lastVisitor, ModScriptConfiguration.getSuperclass(BufferUtilities.getString(data)));
 			    break;
+			}
 			}
 		    }
 		}

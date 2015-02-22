@@ -15,21 +15,21 @@ import org.scapemod.bytecode.asm.MethodVisitor;
  */
 public final class InstructionReader {
 
-    private static final int INSTRUCTION = 0;
-    private static final int FIELD_INSTRUCTION = 1;
-    private static final int METHOD_INSTRUCTION = 2;
-    private static final int TYPE_INSTRUCTION = 3;
-    private static final int INT_INSTRUCTION = 4;
-    private static final int INT_INCREMENT_INSTRUCTION = 5;
-    private static final int VARIABLE_INSTRUCTION = 6;
-    private static final int LDC_INSTRUCTION = 7;
-    private static final int MULTI_A_NEW_ARRAY_INSTRUCTION = 8;
+    public static final int INSTRUCTION = 0;
+    public static final int FIELD_INSTRUCTION = 1;
+    public static final int METHOD_INSTRUCTION = 2;
+    public static final int TYPE_INSTRUCTION = 3;
+    public static final int INT_INSTRUCTION = 4;
+    public static final int INT_INCREMENT_INSTRUCTION = 5;
+    public static final int VARIABLE_INSTRUCTION = 6;
+    public static final int LDC_INSTRUCTION = 7;
+    public static final int MULTI_A_NEW_ARRAY_INSTRUCTION = 8;
 
-    private static final int LDC_INT = 0;
-    private static final int LDC_LONG = 1;
-    private static final int LDC_FLOAT = 2;
-    private static final int LDC_DOUBLE = 3;
-    private static final int LDC_STRING = 4;
+    public static final int LDC_INT = 0;
+    public static final int LDC_LONG = 1;
+    public static final int LDC_FLOAT = 2;
+    public static final int LDC_DOUBLE = 3;
+    public static final int LDC_STRING = 4;
 
     private final ByteBuffer data;
     private final int instructionCount;

@@ -3,6 +3,7 @@ package org.scapemod.bytecode.adapter;
 import org.scapemod.bytecode.asm.ClassVisitor;
 import org.scapemod.bytecode.asm.MethodVisitor;
 import org.scapemod.bytecode.asm.Opcodes;
+import org.scapemod.bytecode.asm.Type;
 
 /**
  * Represents an add getter adapter. This adapter adds a <code>public</code>
@@ -19,7 +20,6 @@ public class AddGetterAdapter extends ClassVisitor {
     private final String ownerName;
     private final int multiplier;
     private final boolean isStatic;
-    private final int returnInstruction;
     
     /**
      * Creates a new add getter adapter.
@@ -31,9 +31,9 @@ public class AddGetterAdapter extends ClassVisitor {
      * @param fieldDescriptor
      *            the descriptor of the field.
      * @param getterName
-     *            the name of the getter method (that will be added).
+     *            the name of the getter method.
      * @param getterDescriptor
-     *            the descriptor of the getter method (that will be added).
+     *            the descriptor of the getter method.
      * @param ownerName
      *            the internal name of the class owning the field.
      * @param multiplier
@@ -59,7 +59,6 @@ public class AddGetterAdapter extends ClassVisitor {
 	this.ownerName = ownerName;
 	this.multiplier = multiplier;
 	this.isStatic = isStatic;
-	this.returnInstruction = determineReturnInstruction();
     }
     
     @Override
@@ -70,31 +69,13 @@ public class AddGetterAdapter extends ClassVisitor {
 	    methodVisitor.visitVarInsn(Opcodes.ALOAD, 0);
 	}
 	methodVisitor.visitFieldInsn(isStatic ? Opcodes.GETSTATIC : Opcodes.GETFIELD, ownerName, fieldName, fieldDescriptor);
-	int maxStack = (returnInstruction == Opcodes.LRETURN) || (returnInstruction == Opcodes.DRETURN) ? 2 : 1;
 	if (multiplier != 1) {
 	    methodVisitor.visitLdcInsn(multiplier);
 	    methodVisitor.visitInsn(Opcodes.IMUL);
-	    maxStack++;
 	}
-	methodVisitor.visitInsn(returnInstruction);
-	methodVisitor.visitMaxs(maxStack, 1);
+	methodVisitor.visitInsn(Type.getType(fieldDescriptor).getOpcode(Opcodes.IRETURN));
+	methodVisitor.visitMaxs(0, 0);
 	methodVisitor.visitEnd();
 	cv.visitEnd();
-    }
-
-    private int determineReturnInstruction() {
-	if (fieldDescriptor.length() > 1) {
-	    return Opcodes.ARETURN;
-	}
-	switch (fieldDescriptor.charAt(0)) {
-	case 'J':
-	    return Opcodes.LRETURN;
-	case 'F':
-	    return Opcodes.FRETURN;
-	case 'D':
-	    return Opcodes.DRETURN;
-	default:
-	    return Opcodes.IRETURN;
-	}
     }
 }

@@ -1,5 +1,5 @@
 package org.scapemod.accessor;
 
-public class IPlayerDefinition {
+public interface IPlayerDefinition {
 
 }

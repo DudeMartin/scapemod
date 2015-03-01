@@ -16,6 +16,10 @@ public interface IInterfaceComponent extends INode {
 
     IInterfaceComponent[] getComponents();
 
+    int[] getItemIds();
+    
+    int[] getItemStackSizes();
+    
     boolean isHidden();
 
     int getParentId();

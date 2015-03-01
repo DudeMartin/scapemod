@@ -4,6 +4,10 @@ public interface ICharacter extends IRenderableNode {
 
     String getOverheadText();
 
+    int getAnimation();
+    
+    int getInteractingIndex();
+    
     int getX();
 
     int getY();

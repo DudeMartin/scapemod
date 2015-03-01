@@ -11,4 +11,6 @@ public interface IWallDecoration {
     int getX();
 
     int getY();
+    
+    int getOrientation();
 }

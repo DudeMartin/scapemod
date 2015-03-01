@@ -4,9 +4,9 @@ public interface ITile {
 
     IInteractableObject[] getObjects();
 
-    IBoundaryObject getBoundary();
+    IBoundaryObject getBoundaryObject();
 
-    IWallDecoration getWall();
+    IWallDecoration getWallDecoration();
 
-    IFloorObject getFloor();
+    IGroundDecoration getGroundDecoration();
 }

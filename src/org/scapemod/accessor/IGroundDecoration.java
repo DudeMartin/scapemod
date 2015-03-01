@@ -1,6 +1,6 @@
 package org.scapemod.accessor;
 
-public interface IFloorObject {
+public interface IGroundDecoration {
 
     IRenderableNode getRenderableNode();
 

@@ -11,4 +11,6 @@ public interface IBoundaryObject {
     int getX();
 
     int getY();
+    
+    int getOrientation();
 }

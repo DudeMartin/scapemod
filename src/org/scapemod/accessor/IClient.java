@@ -5,7 +5,11 @@ import java.awt.Canvas;
 public interface IClient {
 
     Canvas getCanvas();
+    
+    GameKeyboard getKeyboard();
 
+    GameMouse getMouse();
+    
     int getLoginState();
 
     int getConnectionState();
@@ -62,7 +66,7 @@ public interface IClient {
 
     int[][][] getTileHeights();
 
-    byte[][][] getTileBytes();
+    byte[][][] getTileSettings();
 
     int getMapScale();
 
@@ -91,4 +95,6 @@ public interface IClient {
     int getDestinationX();
 
     int getDestinationY();
+    
+    int[] getGameSettings();
 }

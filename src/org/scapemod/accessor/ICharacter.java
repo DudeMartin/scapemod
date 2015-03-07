@@ -11,4 +11,6 @@ public interface ICharacter extends IRenderableNode {
     int getX();
 
     int getY();
+    
+    int getOrientation();
 }

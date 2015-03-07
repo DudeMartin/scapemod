@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.scapemod.bytecode.InstructionReader;
@@ -132,7 +133,7 @@ public final class ModScript {
      * @return the instruction map.
      */
     private Map<Integer, InstructionReader> createInstructionMap() {
-	Map<Integer, InstructionReader> sortedInstructionMap = new TreeMap<Integer, InstructionReader>();
+	SortedMap<Integer, InstructionReader> sortedInstructionMap = new TreeMap<Integer, InstructionReader>();
 	for (int count = data.get(); count > 0; count--) {
 	    int position = BufferUtilities.getUnsignedShort(data);
 	    InstructionReader instructions = new InstructionReader(BufferUtilities.getBytes(data, data.getInt()));

@@ -79,6 +79,14 @@ public interface IClient {
     String[] getMenuActions();
 
     String[] getMenuOptions();
+    
+    int[] getMenuOpcodes();
+    
+    int[] getMenuParams0();
+    
+    int[] getMenuParams1();
+    
+    int[] getMenuParams2();
 
     int getMenuSize();
 

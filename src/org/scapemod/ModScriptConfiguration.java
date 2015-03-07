@@ -1,6 +1,5 @@
 package org.scapemod;
 
-import java.awt.Canvas;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -70,13 +69,15 @@ public final class ModScriptConfiguration {
     }
 
     /**
-     * Sets the internal name of the custom <code>Canvas</code> class.
+     * Associates a superclass with a refactored class name.
      * 
-     * @param customCanvasClass
-     *            the class representation.
+     * @param accessor
+     *            the accessor class.
+     * @param superclass
+     *            the superclass class.
      */
-    public static void setCustomCanvasClassName(Class<? extends Canvas> customCanvasClass) {
-	setSuperclass("Canvas", customCanvasClass);
+    public static void setSuperclass(Class<?> accessor, Class<?> superclass) {
+	setSuperclass(accessor.getSimpleName(), superclass);
     }
 
     /**

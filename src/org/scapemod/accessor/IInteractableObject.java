@@ -12,6 +12,10 @@ public interface IInteractableObject {
 
     int getY();
     
+    int getRelativeX();
+    
+    int getRelativeY();
+    
     int getHeight();
 
     int getOrientation();

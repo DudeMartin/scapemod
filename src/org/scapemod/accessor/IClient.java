@@ -6,10 +6,6 @@ public interface IClient {
 
     Canvas getCanvas();
     
-    GameKeyboard getKeyboard();
-
-    GameMouse getMouse();
-    
     int getLoginState();
 
     int getConnectionState();
